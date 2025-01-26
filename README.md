@@ -35,3 +35,11 @@
   ```bash
   sudo armbian-config
 - Software > RDP > Enable
+
+  ### menghapus sudo password
+  - Ketik
+    ```bash
+    sudo su
+    visudo
+  - Cari username yang terkait misal root kemudian pada bagian
+    ```NOPASSWD= ALL```
