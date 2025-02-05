@@ -2,6 +2,7 @@ const HID = require('node-hid');
 const {Subject} = require('rxjs')
 const {bufferTime} = require("rxjs/operators")
 const axios = require('axios')
+require('dotenv').config()
 const vendorId = 0xffff; // VENDOR ID USB RFID READER
 const productId = 0x0035; // PRODUCT ID USB RFID READER
 // initialization device
@@ -23,8 +24,8 @@ device.on('data', function (data) {
 subject.pipe(bufferTime(300)).subscribe({ 
 	next:(validTag)=>{
 		if(validTag.length === 11){
-			const tag =  validTag.join("").slice(0,10);
-			console.log("CUSTOM TAG ID  : ",validTag.join("").slice(0,10))
+			const tag =  validTag.join("");
+			console.log("CUSTOM TAG ID  : ",validTag.join(""))
 			requestData(tag)	
 		}
 	},
@@ -35,10 +36,10 @@ subject.pipe(bufferTime(300)).subscribe({
 
 const requestData =async (scan)=>{
 		try{
-			const response = await axios.post("http://62.77.158.139:3000/events/scan",{
+			const response = await axios.post(process.env.API_URL,{
 					ip:"192.215.15.15",
 					scan,
-					token:"ef11b18d372b0704afb2a5bde75141e2"
+					token:process.env.TOKEN
 			})
 			
 			console.log(response)
